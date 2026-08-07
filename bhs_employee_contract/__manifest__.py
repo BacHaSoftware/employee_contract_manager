@@ -12,12 +12,14 @@
         and warn employees whose contracts are about to expire.
     """,
     'website': 'https://bachasoftware.com',
-    'depends': ['hr', 'hr_holidays', 'bhs_access','bhs_version'],
+    'depends': ['hr', 'hr_holidays', 'bhs_secure_access_manager'],
     "author": "Bac Ha Software",
     'data': [
         'data/auto_notice_contract_about_expire.xml',
         'security/security.xml',
         'security/ir.model.access.csv',
+        'views/hr_version_view.xml',
+        'views/hr_employee_views.xml',
         'views/hr_contract_history_views.xml',
         'views/hr_leave_views_dashboard.xml',
         'views/hr_leave_views_kanban.xml',
