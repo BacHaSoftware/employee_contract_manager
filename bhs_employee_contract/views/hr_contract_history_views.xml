@@ -1,0 +1,161 @@
+<odoo>
+
+    <record id="hr_contract_history_view_list_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.tree.inherit</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_version_list_view"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='contract_date_start']" position="after">
+                <field name="contract_date_end" optional="show"/>
+                <field name="days_left" optional="hide"/>
+                <field name="contract_type_id" optional="hide"/>
+            </xpath>
+            <xpath expr="//list" position="attributes">
+                <attribute name="editable">bottom</attribute>
+                <attribute name="decoration-danger">0 &lt; days_left &lt; 30</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_contract_form_view" model="ir.ui.view">
+        <field name="name">hr.contract.form</field>
+        <field name="model">hr.version</field>
+        <field name="arch" type="xml">
+            <form string="Employee Contract">
+                <group>
+                    <field name="employee_name"/>
+                    <field name="name"/>
+                    <field name="contract_date_start" string="Start Date"/>
+                    <field name="contract_date_end" string="End Date"/>
+                    <field name="days_left"/>
+                    <field name="wage"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_contract_template_list_view_inherit_v1" model="ir.ui.view">
+        <field name="name">hr.contract.template.tree.inherit</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_contract_template_list_view"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="employee_name"/>
+            </xpath>
+            <xpath expr="//field[@name='wage']" position="after">
+                <field name="contract_date_start" string="Start Date"/>
+                <field name="contract_date_end" string="End Date"/>
+                <field name="days_left"/>
+            </xpath>
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-danger">0 &lt; days_left &lt; 30</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_version_search_view_inherit_running_expired" model="ir.ui.view">
+        <field name="name">hr.version.search.inherit.running.expired</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_version_search_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//filter[@name='running_contract']" position="attributes">
+                <attribute name="domain">
+                    [
+                        '&amp;',
+                            ('employee_id.active', '=', True),
+                            '&amp;',
+                                '|',
+                                    ('contract_date_start', '=', False),
+                                    ('contract_date_start', '&lt;', 'today'),
+                                '|',
+                                    ('contract_date_end', '=', False),
+                                    ('contract_date_end', '&gt;=', 'today')
+                    ]
+                </attribute>
+            </xpath>
+
+            <xpath expr="//filter[@name='expired_contracts']" position="attributes">
+                <attribute name="domain">
+                    [
+                        ('contract_date_end', '!=', False),
+                        ('contract_date_end', '&lt;', 'today')
+                    ]
+                </attribute>
+                <attribute name="context">
+                    {'active_test': False}
+                </attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+
+<!--    TRAINEE CONTRACT-->
+    <record id="hr_trainee_contract_history_view_list_action" model="ir.actions.act_window">
+        <field name="res_model">hr.version</field>
+        <field name="view_mode">list,kanban</field>
+        <field name="search_view_id" ref="hr.hr_version_search_view"/>
+        <field name="context">{}</field>
+        <field name="domain">[('employee_type','=','trainee'), ('active_employee', '=', True)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data to display
+            </p>
+        </field>
+    </record>
+<!--    EMPLOYEE CONTRACT-->
+    <record id="hr_contract_history_view_list_action" model="ir.actions.act_window">
+        <field name="res_model">hr.version</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="search_view_id" ref="bhs_employee_contract.hr_version_search_view_inherit_running_expired"/>
+        <field name="context">{'search_default_running_contract': 1}</field>
+        <field name="domain">[('employee_type','!=','trainee'), ('active_employee', '=', True)]</field>
+        <field name="filter">True</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data to display
+            </p>
+        </field>
+    </record>
+
+    <record id="action_server_hr_employee_contract_filtered" model="ir.actions.server">
+        <field name="name">Employee Contracts (Filtered)</field>
+        <field name="model_id" ref="hr.model_hr_version"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env.ref('bhs_employee_contract.hr_contract_history_view_list_action').sudo().read()[0]
+if not env.user.has_group('hr.group_hr_manager') and env.user.has_group('bhs_secure_access_manager.bhs_ml'):
+    action['domain'] = [('employee_type', '!=', 'trainee'), ('employee_id', 'child_of', env.user.employee_id.id)]
+action_id = action
+        </field>
+    </record>
+
+    <menuitem id="hr_menu_trainee_contract" name="Trainee Contracts"
+              action="hr_trainee_contract_history_view_list_action"
+              parent="hr.menu_hr_employee_payroll" sequence="7"
+              groups="bhs_employee_contract.group_hr_trainee_contract_manager"/>
+
+    <menuitem id="hr_menu_contract" name="Employee Contracts"
+              action="action_server_hr_employee_contract_filtered"
+              parent="hr.menu_hr_employee_payroll" sequence="8"
+              groups="hr.group_hr_manager,bhs_secure_access_manager.bhs_ml"/>
+
+    <record id="bhs_hr_contract_history_view_contract_type_search" model="ir.ui.view">
+        <field name="name">bhs.hr.contract.history.contract.type.search</field>
+        <field name="model">hr.version</field>
+        <field name="inherit_id" ref="hr.hr_version_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="contract_type_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_job']" position="after">
+                <filter string="Contract Type" name="contract_type" domain="[]" context="{'group_by': 'contract_type_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

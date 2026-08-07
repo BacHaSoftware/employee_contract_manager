@@ -1,0 +1,3 @@
+<odoo>
+    <!-- hr.contract form view no longer exists in Odoo 19, replaced by hr.version -->
+</odoo>

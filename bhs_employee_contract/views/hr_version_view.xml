@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Merged from bhs_version module -->
+<odoo>
+    <record id="bhs_hr_version_list_inherit" model="ir.ui.view">
+        <field name="inherit_id" ref="hr.hr_version_list_view" />
+        <field name="model">hr.version</field>
+        <field type="xml" name="arch">
+            <xpath expr="//field[@name='date_version']" position="before">
+                <field name="name"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

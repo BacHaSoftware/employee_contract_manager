@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Merged from bhs_version module -->
+<odoo>
+    <record id="bhs_hr_employee_form_payroll_inherit" model="ir.ui.view">
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="model">hr.employee</field>
+        <field type="xml" name="arch">
+            <xpath expr="//page[@name='payroll_information']//label[@for='contract_date_start']" position="before">
+                <field name="version_name"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
