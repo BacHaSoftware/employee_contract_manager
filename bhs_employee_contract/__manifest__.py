@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Employee Contract Notification',
+    'name': 'Employee Contract Manager',
     'version': '19.0.1.0',
     'category': 'HR',
     'sequence': 335,
