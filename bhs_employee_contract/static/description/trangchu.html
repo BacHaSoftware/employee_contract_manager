@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html lang="en-US" data-website-id="1" data-main-object="loempia.module(233865,)">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <link type="text/css" rel="stylesheet" href="https://apps.odoo.com/web/assets/1/da946fa/web.assets_frontend.min.css"/>
+    </head>
+    <body>
+        <div id="header"></div>
+
+        <script>
+        fetch('index.html')
+        .then(r => r.text())
+        .then(html => {
+            document.getElementById('header').innerHTML = html;
+        });
+        </script>
+    </body>
+</html>
