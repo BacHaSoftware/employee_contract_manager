@@ -8,7 +8,7 @@
     <img src="/bhs_employee_contract/static/description/icon.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Employee Contract Notification</h3>
+  <h3 align="center">Employee Contract Manager</h3>
 
   <p align="center">
     A product of Bac Ha Software allows to distinguish contract is gross or net and warn employees whose contracts are about to expire.

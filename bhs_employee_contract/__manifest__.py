@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Employee Contract Notification',
+    'name': 'Employee Contract Manager',
     'version': '1.0',
     'category': 'HR',
     'sequence': 335,
@@ -18,7 +18,7 @@
         'views/hr_leave_views_dashboard.xml',
         'views/hr_leave_views_kanban.xml',
     ],
-    'images': ['static/description/banner.gif'],
+    'images': ['static/description/banner.png'],
     'installable': True,
     'auto_install': False,
     'application': True,
