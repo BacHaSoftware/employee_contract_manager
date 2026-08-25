@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="hr_contract_history_view_list_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.tree.inherit</field>
+        <field name="model">hr.contract.history</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_history_view_list"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_start']" position="after">
+                <field name="date_end" optional="show"/>
+                <field name="days_left" optional="hide"/>
+                <field name="salary_type" optional="hide"/>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-danger">(state == 'open') and (0 &lt; days_left &lt; 30)</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="bhs_hr_contract_history_view_form_inherit" model="ir.ui.view">
+        <field name="name">bhs.hr.contract.history.form.inherit</field>
+        <field name="model">hr.contract.history</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_history_view_form"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="salary_type"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="bhs_hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">bhs.hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="salary_type"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_contract.hr_menu_contract" model="ir.ui.menu">
+        <field name="action" ref="hr_contract.hr_contract_history_view_list_action"/>
+    </record>
+
+</odoo>

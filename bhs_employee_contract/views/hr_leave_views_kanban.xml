@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="hr_leave_view_kanban_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.view.kanban.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_kanban"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='supported_attachment_ids_count']" position="after">
+                <field name="request_unit_hours"/>
+                <field name="leave_type_request_unit"/>
+                <field name="request_hour_from"/>
+                <field name="request_hour_to"/>
+                <field name="number_of_hours_text"/>
+            </xpath>
+
+            <xpath expr="//div//field[@name='date_from']" position="after">
+                <span>
+                    <field name="request_hour_from" readonly="state == 'validate'"
+                           required="request_unit_hours == True" invisible="request_unit_hours == False"/>
+                </span>
+            </xpath>
+
+            <xpath expr="//div//field[@name='date_to']" position="after">
+                <span>
+                    <field name="request_hour_to" readonly="state == 'validate'"
+                           required="request_unit_hours == True" invisible="request_unit_hours == False"/>
+                </span>
+            </xpath>
+
+            <xpath expr="//strong[hasclass('o_kanban_record_title')]" position="after">
+                <span class="badge badge-pill float-right mt4 ms-2"><t t-esc="record.number_of_hours_text.value"/></span>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
