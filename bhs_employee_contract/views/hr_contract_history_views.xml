@@ -12,8 +12,9 @@
                 <field name="date_end" optional="show"/>
                 <field name="days_left" optional="hide"/>
                 <field name="salary_type" optional="hide"/>
+                <field name="contract_type_id" optional="hide"/>
             </xpath>
-            <xpath expr="//tree" position="attributes">
+            <xpath expr="//list" position="attributes">
                 <attribute name="decoration-danger">(state == 'open') and (0 &lt; days_left &lt; 30)</attribute>
             </xpath>
         </field>
@@ -26,19 +27,9 @@
         <field name="priority">10</field>
         <field name="mode">extension</field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='job_id']" position="after">
-                <field name="salary_type"/>
+            <xpath expr="//header/button[@name='hr_contract_view_form_new_action']" position="attributes">
+                <attribute name="groups">hr_contract.group_hr_contract_manager,bhs_employee_contract.group_hr_trainee_contract_manager</attribute>
             </xpath>
-        </field>
-    </record>
-
-    <record id="bhs_hr_contract_view_form_inherit" model="ir.ui.view">
-        <field name="name">bhs.hr.contract.form.inherit</field>
-        <field name="model">hr.contract</field>
-        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
-        <field name="priority">10</field>
-        <field name="mode">extension</field>
-        <field name="arch" type="xml">
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="salary_type"/>
             </xpath>
@@ -47,6 +38,36 @@
 
     <record id="hr_contract.hr_menu_contract" model="ir.ui.menu">
         <field name="action" ref="hr_contract.hr_contract_history_view_list_action"/>
+        <field name="groups_id" eval="[(4, ref('hr_contract.group_hr_contract_manager')), (4, ref('hr_contract.group_hr_contract_employee_manager'))]"/>
     </record>
 
+<!--    TRAINEE CONTRACT-->
+    <record id="hr_trainee_contract_history_view_list_action" model="ir.actions.act_window">
+        <field name="name">Trainee</field>
+        <field name="res_model">hr.contract.history</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="hr_contract.hr_contract_history_view_search"/>
+        <field name="context">{'search_default_active_employees': 1, 'search_default_group_by_state': 1}</field>
+        <field name="domain">[('employee_id.employee_type','in',['trainee','student'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data to display
+            </p>
+        </field>
+    </record>
+    <menuitem id="hr_menu_trainee_contract" name="Trainee Contracts" action="hr_trainee_contract_history_view_list_action" parent="hr.menu_hr_employee_payroll" sequence="7" groups="group_hr_trainee_contract_manager"/>
+
+    <record id="bhs_hr_contract_history_view_contract_type_search" model="ir.ui.view">
+        <field name="name">bhs.hr.contract.history.contract.type.search</field>
+        <field name="model">hr.contract.history</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_history_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="contract_type_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='job']" position="after">
+                <filter string="Contract Type" name="contract_type" domain="[]" context="{'group_by': 'contract_type_id'}"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

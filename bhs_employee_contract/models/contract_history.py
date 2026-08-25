@@ -1,4 +1,4 @@
-from odoo import api, fields, models, tools
+from odoo import api, fields, models, tools, _
 from collections import defaultdict
 from datetime import datetime
 
@@ -11,6 +11,19 @@ class Contract(models.Model):
         ('gross', 'GROSS')],
         string='Salary type', default='net')
 
+    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count',
+                                     groups="hr.group_hr_user")
+
+    # ko cập nhật data department
+    def _get_employee_vals_to_update(self):
+        self.ensure_one()
+        vals = {'contract_id': self.id}
+        if self.job_id and self.job_id != self.employee_id.job_id:
+            vals['job_id'] = self.job_id.id
+        # if self.department_id:
+        #     vals['department_id'] = self.department_id.id
+        return vals
+
     @api.depends('date_end')
     def _compute_days_left(self):
         for rec in self:
@@ -19,6 +32,30 @@ class Contract(models.Model):
                 diff = (rec.date_end - fields.Date.today()).days
                 rec.days_left = diff
 
+    def _auto_notice_contract_about_expire(self,time=None):
+        contracts = self.env['hr.contract'].search([('state', '=', 'open'),('date_end','!=', False)])
+        for con in contracts:
+            if time and con.date_end == datetime.strptime(time, '%Y-%m-%d %H:%M:%S').date():
+                send_notification = True
+            else:
+                diff = (con.date_end - fields.Date.today()).days
+                send_notification = diff <= con.employee_id.company_id.contract_expiration_notice_period
+            if send_notification:
+                email_from = con.employee_id.company_id.email
+                values = {
+                    'subject': _("Employee %s's contract is about to expire", con.employee_id.name),
+                    'body': _("Employee %s's contract will expire on %s", con.employee_id.name, con.date_end),
+                    'record_name': _("Employee %s's contract", con.employee_id.name),
+                    'email_from': email_from,
+                    'reply_to': email_from,
+                    'model': 'hr.contract',
+                    'res_id': con.id,
+                    'reply_to_force_new': True,
+                    'email_add_signature': True,
+                    'partner_ids': [con.hr_responsible_id.partner_id.id, con.employee_id.parent_id.user_id.partner_id.id]
+                }
+                message = self.env['mail.message'].create(values)
+                self._notify_thread(message, values)
 
 class CusContractHistory(models.Model):
     _inherit = 'hr.contract.history'

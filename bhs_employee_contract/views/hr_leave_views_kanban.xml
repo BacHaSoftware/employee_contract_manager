@@ -12,25 +12,13 @@
                 <field name="leave_type_request_unit"/>
                 <field name="request_hour_from"/>
                 <field name="request_hour_to"/>
-                <field name="number_of_hours_text"/>
             </xpath>
 
-            <xpath expr="//div//field[@name='date_from']" position="after">
-                <span>
-                    <field name="request_hour_from" readonly="state == 'validate'"
-                           required="request_unit_hours == True" invisible="request_unit_hours == False"/>
-                </span>
-            </xpath>
-
-            <xpath expr="//div//field[@name='date_to']" position="after">
-                <span>
-                    <field name="request_hour_to" readonly="state == 'validate'"
-                           required="request_unit_hours == True" invisible="request_unit_hours == False"/>
-                </span>
-            </xpath>
-
-            <xpath expr="//strong[hasclass('o_kanban_record_title')]" position="after">
-                <span class="badge badge-pill float-right mt4 ms-2"><t t-esc="record.number_of_hours_text.value"/></span>
+            <xpath expr="//span[@class='badge rounded-pill float-end']" position="replace">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="badge rounded-pill"><field name="number_of_days"/> days</span>
+                    <span class="badge rounded-pill"><field name="number_of_hours"/> hours</span>
+                </div>
             </xpath>
 
         </field>

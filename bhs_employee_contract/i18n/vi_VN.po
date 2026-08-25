@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-06 10:22+0000\n"
-"PO-Revision-Date: 2023-12-06 10:22+0000\n"
+"POT-Creation-Date: 2024-12-02 10:47+0000\n"
+"PO-Revision-Date: 2024-12-02 10:47+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,9 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: bhs_employee_contract
-#: model:ir.model,name:bhs_employee_contract.model_hr_contract
-msgid "Contract"
-msgstr "Hợp đồng nhân viên"
+#: model_terms:ir.ui.view,arch_db:bhs_employee_contract.bhs_hr_contract_history_view_contract_type_search
+msgid "Contract Type"
+msgstr "Loại hợp đồng"
 
 #. module: bhs_employee_contract
 #: model:ir.model,name:bhs_employee_contract.model_hr_contract_history
@@ -30,3 +30,86 @@ msgstr "Lịch sử hợp đồng"
 #: model:ir.model.fields,field_description:bhs_employee_contract.field_hr_contract_history__days_left
 msgid "Days left"
 msgstr "Số ngày còn lại"
+
+#. module: bhs_employee_contract
+#. odoo-python
+#: code:addons/bhs_employee_contract/models/contract_history.py:0
+msgid "Employee %s's contract"
+msgstr "Hợp đồng nhân viên %s"
+
+#. module: bhs_employee_contract
+#. odoo-python
+#: code:addons/bhs_employee_contract/models/contract_history.py:0
+msgid "Employee %s's contract is about to expire"
+msgstr "Hợp đồng của nhân viên %s sắp hết hạn"
+
+#. module: bhs_employee_contract
+#. odoo-python
+#: code:addons/bhs_employee_contract/models/contract_history.py:0
+msgid "Employee %s's contract will expire on %s"
+msgstr "Hợp đồng của nhân viên %s sẽ hết hạn vào %s"
+
+#. module: bhs_employee_contract
+#: model:ir.model,name:bhs_employee_contract.model_hr_contract
+msgid "Employee Contract"
+msgstr "Hợp đồng lao động"
+
+#. module: bhs_employee_contract
+#: model:ir.model.fields.selection,name:bhs_employee_contract.selection__hr_contract__salary_type__gross
+#: model:ir.model.fields.selection,name:bhs_employee_contract.selection__hr_contract_history__salary_type__gross
+msgid "GROSS"
+msgstr ""
+
+#. module: bhs_employee_contract
+#: model:ir.actions.server,name:bhs_employee_contract.hr_ir_cron_notice_contract_about_expire_ir_actions_server
+msgid "HR Contract: Auto Notice Contract About Expire"
+msgstr ""
+
+#. module: bhs_employee_contract
+#: model:res.groups,comment:bhs_employee_contract.group_hr_trainee_contract_manager
+msgid ""
+"HR staff managing trainee have the right to manage trainees' contracts."
+msgstr ""
+"Nhân viên nhân sự quản lý thực tập sinh có quyền quản lý hợp đồng của các thực tập sinh."
+
+#. module: bhs_employee_contract
+#: model:ir.model.fields.selection,name:bhs_employee_contract.selection__hr_contract__salary_type__net
+#: model:ir.model.fields.selection,name:bhs_employee_contract.selection__hr_contract_history__salary_type__net
+msgid "NET"
+msgstr ""
+
+#. module: bhs_employee_contract
+#: model_terms:ir.actions.act_window,help:bhs_employee_contract.hr_trainee_contract_history_view_list_action
+msgid "No data to display"
+msgstr "Không có dữ liệu để hiển thị"
+
+#. module: bhs_employee_contract
+#: model:ir.model.fields,field_description:bhs_employee_contract.field_hr_contract__salary_type
+#: model:ir.model.fields,field_description:bhs_employee_contract.field_hr_contract_history__salary_type
+msgid "Salary type"
+msgstr ""
+
+#. module: bhs_employee_contract
+#: model:ir.actions.act_window,name:bhs_employee_contract.hr_trainee_contract_history_view_list_action
+msgid "Trainee"
+msgstr "TTS"
+
+#. module: bhs_employee_contract
+#: model:ir.ui.menu,name:bhs_employee_contract.hr_menu_trainee_contract
+msgid "Trainee Contracts"
+msgstr "Hợp đồng TTS"
+
+#. module: bhs_employee_contract
+#: model:res.groups,name:bhs_employee_contract.group_hr_trainee_contract_manager
+msgid "Trainee Manager"
+msgstr "Quản lý TTS"
+
+#. module: bhs_employee_contract
+#: model_terms:ir.ui.view,arch_db:bhs_employee_contract.hr_leave_view_kanban_inherit
+msgid "days"
+msgstr "ngày"
+
+#. module: bhs_employee_contract
+#: model_terms:ir.ui.view,arch_db:bhs_employee_contract.hr_leave_view_kanban_inherit
+msgid "hours"
+msgstr "giờ"
