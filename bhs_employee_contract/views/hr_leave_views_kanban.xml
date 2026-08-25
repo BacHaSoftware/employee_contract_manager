@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="hr_leave_view_kanban_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.view.kanban.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_kanban"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='supported_attachment_ids_count']" position="after">
+                <field name="request_unit_hours"/>
+                <field name="leave_type_request_unit"/>
+                <field name="request_hour_from"/>
+                <field name="request_hour_to"/>
+            </xpath>
+
+            <xpath expr="//span[@class='badge rounded-pill float-end']" position="replace">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="badge rounded-pill"><field name="number_of_days"/> days</span>
+                    <span class="badge rounded-pill"><field name="number_of_hours"/> hours</span>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

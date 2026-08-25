@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="bhs_hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">bhs.hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="priority">10</field>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='hr_responsible_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            <xpath expr="//header" position="replace">
+                <header invisible="not id">
+                    <field name="state" groups="!bhs_employee_contract.group_hr_trainee_contract_manager" widget="statusbar"/>
+                    <field name="state" groups="bhs_employee_contract.group_hr_trainee_contract_manager" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+             </xpath>
+            <xpath expr="//sheet//button[@name='action_open_contract_list']" position="attributes">
+                <attribute name="groups">hr_contract.group_hr_contract_manager,bhs_employee_contract.group_hr_trainee_contract_manager</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="salary_type"/>
+            </xpath>
+            <xpath expr="//group[@name='top_info_left']" position="inside">
+                <field name="employee_appraisal_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

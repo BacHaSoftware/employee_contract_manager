@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record id="group_hr_trainee_contract_manager" model="res.groups">
+            <field name="name">Trainee Manager</field>
+            <field name="category_id" ref="base.module_category_human_resources_contracts"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">HR staff managing trainee have the right to manage trainees' contracts.</field>
+        </record>
+
+        <record id="hr_contract.group_hr_contract_manager" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('bhs_employee_contract.group_hr_trainee_contract_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>
