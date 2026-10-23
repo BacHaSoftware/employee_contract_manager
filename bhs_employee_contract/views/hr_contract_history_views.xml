@@ -10,7 +10,7 @@
             <xpath expr="//field[@name='contract_date_start']" position="after">
                 <field name="contract_date_end" optional="show"/>
                 <field name="days_left" optional="hide"/>
-                <field name="contract_type_id" optional="hide"/>
+                <field name="employee_type_id" optional="hide" groups="hr.group_hr_manager"/>
             </xpath>
             <xpath expr="//list" position="attributes">
                 <attribute name="editable">bottom</attribute>
@@ -67,11 +67,11 @@
                 <attribute name="domain">
                     [
                         '&amp;',
-                            ('employee_id.active', '=', True),
+                            ('bhs_employee_active', '=', True),
                             '&amp;',
                                 '|',
                                     ('contract_date_start', '=', False),
-                                    ('contract_date_start', '&lt;', 'today'),
+                                    ('contract_date_start', '&lt;=', 'today'),
                                 '|',
                                     ('contract_date_end', '=', False),
                                     ('contract_date_end', '&gt;=', 'today')
@@ -91,6 +91,24 @@
                 </attribute>
             </xpath>
 
+            <!-- The module menus are reachable by the M&amp;L and trainee manager roles: hide the filters whose fields
+                 these roles cannot read (clicking them raised an AccessError). -->
+            <xpath expr="//filter[@name='running_contract']" position="attributes">
+                <attribute name="groups">hr.group_hr_user,bhs_secure_access_manager.bhs_ml</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='expired_contracts']" position="attributes">
+                <attribute name="groups">hr.group_hr_user,bhs_secure_access_manager.bhs_ml</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='future_contracts']" position="attributes">
+                <attribute name="groups">hr.group_hr_user,bhs_secure_access_manager.bhs_ml</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='active_employees']" position="attributes">
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </xpath>
+            <xpath expr="//filter[@name='group_by_structure_type_id']" position="attributes">
+                <attribute name="groups">hr.group_hr_manager</attribute>
+            </xpath>
+
         </field>
     </record>
 
@@ -98,10 +116,11 @@
 <!--    TRAINEE CONTRACT-->
     <record id="hr_trainee_contract_history_view_list_action" model="ir.actions.act_window">
         <field name="res_model">hr.version</field>
-        <field name="view_mode">list,kanban</field>
+        <!-- form: "New" in the editable list otherwise leaves an unsaved row (required fields) the user cannot leave -->
+        <field name="view_mode">list,form,kanban</field>
         <field name="search_view_id" ref="hr.hr_version_search_view"/>
         <field name="context">{}</field>
-        <field name="domain">[('employee_type','=','trainee'), ('active_employee', '=', True)]</field>
+        <field name="domain">[('bhs_is_trainee', '=', True), ('bhs_employee_active', '=', True)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
                 No data to display
@@ -114,7 +133,7 @@
         <field name="view_mode">list,form,kanban</field>
         <field name="search_view_id" ref="bhs_employee_contract.hr_version_search_view_inherit_running_expired"/>
         <field name="context">{'search_default_running_contract': 1}</field>
-        <field name="domain">[('employee_type','!=','trainee'), ('active_employee', '=', True)]</field>
+        <field name="domain">[('bhs_is_trainee', '=', False), ('bhs_employee_active', '=', True)]</field>
         <field name="filter">True</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
@@ -126,23 +145,31 @@
     <record id="action_server_hr_employee_contract_filtered" model="ir.actions.server">
         <field name="name">Employee Contracts (Filtered)</field>
         <field name="model_id" ref="hr.model_hr_version"/>
+        <!-- Odoo 20: a server action without groups needs write access on its model; M&amp;L only reads -->
+        <field name="group_ids" eval="[(6, 0, [ref('hr.group_hr_manager'), ref('bhs_secure_access_manager.bhs_ml')])]"/>
         <field name="state">code</field>
         <field name="code">
 action = env.ref('bhs_employee_contract.hr_contract_history_view_list_action').sudo().read()[0]
 if not env.user.has_group('hr.group_hr_manager') and env.user.has_group('bhs_secure_access_manager.bhs_ml'):
-    action['domain'] = [('employee_type', '!=', 'trainee'), ('employee_id', 'child_of', env.user.employee_id.id)]
+    action['domain'] = [('bhs_is_trainee', '=', False), ('employee_id', 'child_of', env.user.employee_id.id)]
 action_id = action
         </field>
     </record>
 
+    <!-- Own parent menu: 'Management' (hr.menu_hr_employee_payroll) is for HR officers only and hid the menus from
+         the M&amp;L and trainee manager roles. Plain employees do not see it. -->
+    <menuitem id="hr_menu_contracts_root" name="Contracts"
+              parent="hr.menu_hr_root" sequence="2"
+              groups="hr.group_hr_manager,bhs_secure_access_manager.bhs_ml,bhs_employee_contract.group_hr_trainee_contract_manager"/>
+
     <menuitem id="hr_menu_trainee_contract" name="Trainee Contracts"
               action="hr_trainee_contract_history_view_list_action"
-              parent="hr.menu_hr_employee_payroll" sequence="7"
+              parent="hr_menu_contracts_root" sequence="7"
               groups="bhs_employee_contract.group_hr_trainee_contract_manager"/>
 
     <menuitem id="hr_menu_contract" name="Employee Contracts"
               action="action_server_hr_employee_contract_filtered"
-              parent="hr.menu_hr_employee_payroll" sequence="8"
+              parent="hr_menu_contracts_root" sequence="8"
               groups="hr.group_hr_manager,bhs_secure_access_manager.bhs_ml"/>
 
     <record id="bhs_hr_contract_history_view_contract_type_search" model="ir.ui.view">
@@ -151,10 +178,10 @@ action_id = action
         <field name="inherit_id" ref="hr.hr_version_search_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='job_id']" position="after">
-                <field name="contract_type_id"/>
+                <field name="employee_type_id" groups="hr.group_hr_manager"/>
             </xpath>
             <xpath expr="//filter[@name='group_by_job']" position="after">
-                <filter string="Contract Type" name="contract_type" domain="[]" context="{'group_by': 'contract_type_id'}"/>
+                <filter string="Employee Type" name="contract_type" domain="[]" context="{'group_by': 'employee_type_id'}" groups="hr.group_hr_manager"/>
             </xpath>
         </field>
     </record>

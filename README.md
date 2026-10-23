@@ -87,6 +87,10 @@ A product of Bac Ha Software is an Odoo extension that simplifies contract manag
 
 <!-- 🌟 <code>Convenient Management</code>: Easily manage contact statuses with a user-friendly interface. Assign different statuses to contacts and manage them effectively. -->
 
+#### Note on the Wage field
+
+The module lets HR officers and M&L managers (own team) read the contract Wage. When the Enterprise <code>Payroll</code> app is installed, Payroll restricts Wage to its own users (Payroll / Officer and above), and that rule applies: HR officers and M&L managers without Payroll rights do not see the Wage.
+
 
 <!-- LICENSE -->
 ## License

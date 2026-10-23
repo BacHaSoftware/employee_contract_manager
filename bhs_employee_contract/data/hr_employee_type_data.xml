@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo 20 replaced the hr.version.employee_type selection ('trainee') by hr.employee.type records.
+         Trainee contracts are the contracts with this employee type. -->
+    <data noupdate="1">
+        <record id="employee_type_trainee" model="hr.employee.type">
+            <field name="name">Trainee</field>
+            <field name="sequence">4</field>
+        </record>
+    </data>
+</odoo>

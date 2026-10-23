@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Merged from bhs_version module -->
 <odoo>
     <record id="bhs_hr_employee_form_payroll_inherit" model="ir.ui.view">
         <field name="inherit_id" ref="hr.view_employee_form"/>

@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
 
             
-            <xpath expr="//t[@t-name='card']//field[@name='duration_display']/ancestor::div[contains(@class,'col-2') and contains(@class,'o_hr_holidays_card')][1]" position="replace">
+            <xpath expr="//t[@t-name='card']//field[@name='duration_display']/ancestor::div[hasclass('col-2', 'o_hr_holidays_card')][1]" position="replace">
                 <div class="col-2 o_hr_holidays_card">
                     <div class="d-flex justify-content-between mb-1">
                         <span class="badge rounded-pill"><field name="number_of_days"/> days</span>

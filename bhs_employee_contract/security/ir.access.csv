@@ -1,0 +1,3 @@
+id,name,model_id,group_id/id,operation,domain
+access_hr_trainee_contract_manager,hr.trainee.contract.manager,hr.version,bhs_employee_contract.group_hr_trainee_contract_manager,rud,"[('bhs_is_trainee', '=', True)]"
+access_hr_version_bhs_ml,hr.version.bhs_ml,hr.version,bhs_secure_access_manager.bhs_ml,r,"[('employee_id', 'child_of', user.employee_id.id)]"

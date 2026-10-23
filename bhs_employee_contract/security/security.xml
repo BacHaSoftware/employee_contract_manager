@@ -15,17 +15,5 @@
         <record id="hr.group_hr_manager" model="res.groups">
             <field name="implied_ids" eval="[(4, ref('bhs_employee_contract.group_hr_trainee_contract_manager'))]"/>
         </record>
-
-        <record id="hr_version_manager_rule" model="ir.rule">
-            <field name="name">HR Manager: Full Employee Contracts Access</field>
-            <field name="model_id" ref="hr.model_hr_version"/>
-            <field name="groups" eval="[(4, ref('hr.group_hr_manager'))]"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-
     </data>
 </odoo>

@@ -3,7 +3,7 @@
 
 {
     'name': 'Employee Contract Manager',
-    'version': '19.0.1.0',
+    'version': '20.0.1.0.3',
     'category': 'HR',
     'sequence': 335,
     'summary': "Distinguish contract is gross or net and warn employees whose contracts are about to expire.",
@@ -16,8 +16,9 @@
     "author": "Bac Ha Software",
     'data': [
         'data/auto_notice_contract_about_expire.xml',
+        'data/hr_employee_type_data.xml',
         'security/security.xml',
-        'security/ir.model.access.csv',
+        'security/ir.access.csv',
         'views/hr_version_view.xml',
         'views/hr_employee_views.xml',
         'views/hr_contract_history_views.xml',
@@ -30,6 +31,9 @@
     'auto_install': False,
     'application': True,
     'assets': {
+        'web.assets_tests': [
+            'bhs_employee_contract/static/tests/tours/**/*',
+        ],
     },
     'license': 'LGPL-3'
 }
