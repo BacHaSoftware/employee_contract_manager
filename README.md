@@ -4,8 +4,8 @@
 <!-- PROJECT DETAILS -->
 <br />
 <div align="center">
-  <a href="https://github.com/BacHaSoftware/partner_status">
-    <img src="/bhs_partner_status/static/description/icon.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/BacHaSoftware/employee_contract_manager">
+    <img src="/bhs_employee_contract/static/description/icon.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Employee Contract Manager</h3>
